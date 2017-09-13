@@ -1,4 +1,4 @@
-// ui-editor.js
+e/// ui-editor.js
 //
 // == OpenJSCAD.org, Copyright (c) 2013-2016, Licensed under MIT License
 //
@@ -90,9 +90,18 @@ function setUpEditor (divname, gProcessor) {
     name: 'saveSource',
     bindKey: { win: 'Ctrl-S', mac: 'Command-S' },
     exec: function (editor) {
-      var src = editor.getValue()
-      localStorage.editorContent = src
-      gProcessor.setStatus('saved', 'Saved source to browser storage')
+      var src = editor.getValue();
+      localStorage.editorContent = src;
+      var path = gProcessor.filename;
+      //alert(editor.filename)
+      var xhr = new XMLHttpRequest();
+      xhr.open('PUT', editor.filename, true);
+      var blob = new Blob([src], {type: 'text/plain'});
+      xhr.send(blob); 
+      xhr.onreadystatechange = processRequest; 
+      function processRequest(e) { 
+        gProcessor.setStatus('saved', 'Saved source to server: '+path);
+      };      
     }
   })
   gEditor.commands.addCommand({
@@ -129,6 +138,7 @@ function setUpEditor (divname, gProcessor) {
 function putSourceInEditor (gEditor, src, fn) {
   if (gEditor !== null) {
     gEditor.setValue(src, -1)
+    gEditor.filename=fn
     if (src.match(/^\/\/!OpenSCAD/i)) {
       gEditor.getSession().setMode('ace/mode/scad')
     } else {

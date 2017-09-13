@@ -187,7 +187,7 @@ function loadInitialExample (me, params) {
     const baseUrl = location.protocol + '//' + location.host + location.pathname
 
     const isRemote = documentUri ? documentUri.match(/(https?:\/\/\S+)$/) !== null : false
-    const isLocal = documentUri ? documentUri.match(/(examples\/\S+)$/)!== null : false
+    const isLocal = documentUri ? (documentUri.match(/(examples\/\S+)$/)!== null || documentUri.match(/(storage\/\S+)$/)!== null): false
     const isInLocalStorage = localStorage.editorContent && localStorage.editorContent.length
 
     //console.log('useProxy', useProxy, 'documentUri', documentUri, 'baseUrl', baseUrl)
