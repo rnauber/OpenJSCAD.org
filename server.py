@@ -1,25 +1,27 @@
 #!/usr/bin/env python
 
+### beware! this might be full of bugs and security holes
+
+
 import argparse
 import http.server
 import os
+import subprocess
 
 class HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     storagedir=None
     storageprefix="storage"
  
     def translate_path(self, path):
-        
-        print("XX Translate.. " + path)
         path = super().translate_path(path)
         if self.storagedir:
-            path = path.replace(os.path.join(os.getcwd(),self.storageprefix),self.storagedir)       
-        print("XXto "+path)
+            path = os.path.normpath(path.replace(os.path.join(os.getcwd(), self.storageprefix, ''), self.storagedir))
         return path
             
     def do_PUT(self):
         path = self.translate_path(self.path)
-        if not path.startswith(os.path.join(os.getcwd(),self.storageprefix)):
+        print("PUT  "+ self.path +' '+path )
+        if not self.path.startswith("/" + self.storageprefix):
             self.send_response(405, "Method Not Allowed")
             self.wfile.write("PUT not allowed outside of storage.\n".encode())
             self.end_headers()
@@ -31,6 +33,7 @@ class HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             length = int(self.headers['Content-Length'])
             with open(path, 'wb') as f:
                 f.write(self.rfile.read(length))
+            subprocess.call('cd "{}"; git add "{}"; git commit -m "openJSCAD autocommit"'.format(self.storagedir,path), shell=True)
             self.send_response(201, "Created")
             self.end_headers() 
 

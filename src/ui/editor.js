@@ -1,4 +1,4 @@
-e/// ui-editor.js
+/// ui-editor.js
 //
 // == OpenJSCAD.org, Copyright (c) 2013-2016, Licensed under MIT License
 //
@@ -86,14 +86,17 @@ function setUpEditor (divname, gProcessor) {
       }
     }
   })
+
+//     Editor.on("change", function(Object e)) 
+
+
   gEditor.commands.addCommand({
     name: 'saveSource',
     bindKey: { win: 'Ctrl-S', mac: 'Command-S' },
     exec: function (editor) {
       var src = editor.getValue();
       localStorage.editorContent = src;
-      var path = gProcessor.filename;
-      //alert(editor.filename)
+      var path = editor.filename;
       var xhr = new XMLHttpRequest();
       xhr.open('PUT', editor.filename, true);
       var blob = new Blob([src], {type: 'text/plain'});
@@ -104,6 +107,7 @@ function setUpEditor (divname, gProcessor) {
       };      
     }
   })
+/*
   gEditor.commands.addCommand({
     name: 'loadSource',
     bindKey: { win: 'Ctrl-L', mac: 'Command-L' },
@@ -114,6 +118,7 @@ function setUpEditor (divname, gProcessor) {
       gProcessor.setStatus('loaded', 'Loaded source from browser storage')
     }
   })
+*/
   gEditor.commands.addCommand({
     name: 'downloadSource',
     bindKey: { win: 'Ctrl-Shift-S', mac: 'Command-Shift-S' },
@@ -124,7 +129,8 @@ function setUpEditor (divname, gProcessor) {
         var object_url = URL.createObjectURL(blob)
         var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a')
         save_link.href = object_url
-        save_link.download = 'MyDesign.jscad'
+        //save_link.download = 'MyDesign.jscad'
+        save_link.download = gEditor.filename
 
         var event = new MouseEvent('click')
         save_link.dispatchEvent(event)

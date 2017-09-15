@@ -183,12 +183,12 @@ function loadInitialExample (me, params) {
 
     // const proxyPath = fetchUriParams(url, 'proxyPath', undefined)
     const useProxy = params.proxyUrl !== undefined || document.URL.match(/#(https?:\/\/\S+)$/) !== null
-    const documentUri = fetchUriParams(url, 'uri', undefined) || nth(1, document.URL.match(/#(https?:\/\/\S+)$/)) || nth(1, document.URL.match(/#(examples\/\S+)$/))
+    const documentUri = fetchUriParams(url, 'uri', undefined) || nth(1, document.URL.match(/#(https?:\/\/\S+)$/)) || nth(1, document.URL.match(/#(examples\/\S+)$/)) || nth(1, document.URL.match(/#(storage\/\S+)$/))
     const baseUrl = location.protocol + '//' + location.host + location.pathname
 
     const isRemote = documentUri ? documentUri.match(/(https?:\/\/\S+)$/) !== null : false
-    const isLocal = documentUri ? (documentUri.match(/(examples\/\S+)$/)!== null || documentUri.match(/(storage\/\S+)$/)!== null): false
-    const isInLocalStorage = localStorage.editorContent && localStorage.editorContent.length
+    const isLocal = ! isRemote
+    const isInLocalStorage = false
 
     //console.log('useProxy', useProxy, 'documentUri', documentUri, 'baseUrl', baseUrl)
     //console.log('isRemote', isRemote, 'isLocal', isLocal)

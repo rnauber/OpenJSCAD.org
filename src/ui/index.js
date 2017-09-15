@@ -1,6 +1,6 @@
 // == OpenJSCAD.org, Copyright (c) 2013-2016, Licensed under MIT License
 const { setUpEditor } = require('./editor')
-const { setupDragDrop } = require('./dragDrop/ui-drag-drop') // toggleAutoReload
+//const { setupDragDrop } = require('./dragDrop/ui-drag-drop') // toggleAutoReload
 
 const { detectBrowser } = require('./detectBrowser')
 const { getUrlParams } = require('./urlHelpers')
@@ -180,7 +180,7 @@ function init () {
   }
 
   // dropzone section
-  if (tail) {
+  if (0) {
     let dropZone = document.getElementById('filedropzone')
     if (dropZone) {
       const dropZoneText = browser === 'chrome' && me === 'web-online' ? ', or folder with jscad files ' : ''
