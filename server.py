@@ -33,7 +33,7 @@ class HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             length = int(self.headers['Content-Length'])
             with open(path, 'wb') as f:
                 f.write(self.rfile.read(length))
-            subprocess.call('cd "{}"; git add "{}"; git commit -m "openJSCAD autocommit"'.format(self.storagedir,path), shell=True)
+            subprocess.call('cd "{}"; git pull origin master2; git add "{}"; git commit -m "openJSCAD autocommit"; git push origin master:master2'.format(self.storagedir,path), shell=True)
             self.send_response(201, "Created")
             self.end_headers() 
 

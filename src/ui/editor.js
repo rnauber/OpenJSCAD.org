@@ -87,13 +87,9 @@ function setUpEditor (divname, gProcessor) {
     }
   })
 
-//     Editor.on("change", function(Object e)) 
 
 
-  gEditor.commands.addCommand({
-    name: 'saveSource',
-    bindKey: { win: 'Ctrl-S', mac: 'Command-S' },
-    exec: function (editor) {
+function save(editor) {
       var src = editor.getValue();
       localStorage.editorContent = src;
       var path = editor.filename;
@@ -102,10 +98,23 @@ function setUpEditor (divname, gProcessor) {
       var blob = new Blob([src], {type: 'text/plain'});
       xhr.send(blob); 
       xhr.onreadystatechange = processRequest; 
+      //editor.lastsaved=now();
       function processRequest(e) { 
         gProcessor.setStatus('saved', 'Saved source to server: '+path);
       };      
     }
+    
+  gEditor.on("change", function (editor){ 
+	//editor.lastsaved; 
+  	//save(gEditor);
+  }); 
+
+  gEditor.commands.addCommand({
+    name: 'saveSource',
+    bindKey: { win: 'Ctrl-S', mac: 'Command-S' },
+    exec: function (editor){
+    	save(editor)
+    },   
   })
 /*
   gEditor.commands.addCommand({
